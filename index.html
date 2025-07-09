@@ -8,7 +8,6 @@
       margin: 0;
       background: black;
       overflow: hidden;
-      color: #00ff00;
       font-family: monospace;
     }
 
@@ -25,64 +24,72 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
-      font-size: 2rem;
       color: #00FF00;
+      font-size: 2rem;
+      text-align: center;
       z-index: 1;
-      animation: blink 1s infinite alternate;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.6);
       padding: 20px;
-      border: 2px solid #00ff00;
+      border: 1px solid #00FF00;
       border-radius: 10px;
+      animation: blink 1s infinite alternate;
     }
 
     @keyframes blink {
-      0% { opacity: 0.2; }
-      100% { opacity: 1; }
+      from { opacity: 0.2; }
+      to   { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
-  <div class="message">
-    Per molts anys, Jose,<br>
-    gran saltamontes,<br>
-    domador de servidors<br>
-    i pare de hackers 🖤💾
-  </div>
 
-  <script>
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
+<canvas id="matrix"></canvas>
+<div class="message">
+  Per molts anys, Jose,<br>
+  gran saltamontes,<br>
+  domador de servidors<br>
+  i pare de hackers 🖤💾
+</div>
 
+<script>
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const letters = '01'.split('');
+  const fontSize = 16;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = Array(columns).fill(1);
+
+  function drawMatrix() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#0F0';
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < drops.length; i++) {
+      const text = letters[Math.floor(Math.random() * letters.length)];
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+
+      drops[i]++;
+    }
+  }
+
+  setInterval(drawMatrix, 50);
+
+  // Optional: Reajustar quan canvies la mida de la finestra
+  window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+  });
+</script>
 
-    const letters = '01'.split('');
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array(Math.floor(columns)).fill(1);
-
-    function drawMatrix() {
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = '#0F0';
-      ctx.font = fontSize + 'px monospace';
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
-      }
-    }
-
-    setInterval(drawMatrix, 50);
-  </script>
 </body>
 </html>

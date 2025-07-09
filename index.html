@@ -11,46 +11,78 @@
       color: #00ff00;
       font-family: monospace;
     }
+
     canvas {
       display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 2rem;
+      color: #00FF00;
+      z-index: 1;
+      animation: blink 1s infinite alternate;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
     }
   </style>
 </head>
 <body>
-<canvas id="matrix"></canvas>
+  <canvas id="matrix"></canvas>
+  <div class="message">
+    Per molts anys, Jose,<br>
+    gran saltamontes,<br>
+    domador de servidors<br>
+    i pare de hackers 🖤💾
+  </div>
 
-<script>
-const canvas = document.getElementById('matrix');
-const ctx = canvas.getContext('2d');
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-const letters = '01¡¿<>!#@%&+=-• Per molts anys, Jose, gran saltamontes, domador de servidors i pare de hackers. '.split('');
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-const drops = Array(Math.floor(columns)).fill(1);
+    const letters = '01'.split('');
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
 
-function drawMatrix() {
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = '#0F0';
-  ctx.font = fontSize + 'px monospace';
+      ctx.fillStyle = '#0F0';
+      ctx.font = fontSize + 'px monospace';
 
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters[Math.floor(Math.random() * letters.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
     }
 
-    drops[i]++;
-  }
-}
-
-setInterval(drawMatrix, 50);
-</script>
+    setInterval(drawMatrix, 50);
+  </script>
 </body>
 </html>
